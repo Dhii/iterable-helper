@@ -6,21 +6,21 @@ use Xpmock\TestCase;
 use ArrayIterator;
 use IteratorIterator;
 use IteratorAggregate;
-use Dhii\Iterator\CountIteratorCapableTrait as TestSubject;
+use Dhii\Iterator\CountIterableCapableTrait as TestSubject;
 
 /**
  * Tests {@see TestSubject}.
  *
  * @since [*next-version*]
  */
-class CountIteratorCapableTraitTest extends TestCase
+class CountIterableCapableTraitTest extends TestCase
 {
     /**
      * The class name of the test subject.
      *
      * @since [*next-version*]
      */
-    const TEST_SUBJECT_CLASSNAME = 'Dhii\Iterator\CountIteratorCapableTrait';
+    const TEST_SUBJECT_CLASSNAME = 'Dhii\Iterator\CountIterableCapableTrait';
 
     /**
      * Creates a new instance of the test subject.

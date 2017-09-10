@@ -11,7 +11,7 @@ use Countable;
  *
  * @since [*next-version*]
  */
-trait CountIteratorCapableTrait
+trait CountIterableCapableTrait
 {
     /**
      * Counts the elements in an iterable.
