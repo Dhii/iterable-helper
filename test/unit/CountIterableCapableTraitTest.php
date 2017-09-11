@@ -5,6 +5,7 @@ namespace Dhii\Iterator\FuncTest;
 use Xpmock\TestCase;
 use ArrayIterator;
 use IteratorIterator;
+use InfiniteIterator;
 use IteratorAggregate;
 use Dhii\Iterator\CountIterableCapableTrait as TestSubject;
 
@@ -93,6 +94,25 @@ class CountIterableCapableTraitTest extends TestCase
     }
 
     /**
+     * Creates something which can be iterated over infinitely.
+     *
+     * @since [*next-version*]
+     *
+     * @param array|null $array The array, over which to iterate infinitely.
+     *                          If null, an array with one element that is a random string will be used.
+     *
+     * @return Traversable The infinite iterator.
+     */
+    public function createIteratorInfinite($array = null)
+    {
+        if (is_null($array)) {
+            $array = [uniqid()];
+        }
+
+        return new InfiniteIterator(new ArrayIterator($array));
+    }
+
+    /**
      * Tests whether a valid instance of the test subject can be created.
      *
      * @since [*next-version*]
@@ -177,6 +197,26 @@ class CountIterableCapableTraitTest extends TestCase
         );
 
         $result = $_subject->_countIterable($this->createIteratorAggregateNonCountable($data));
+        $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
+    }
+
+    /**
+     * Tests that counting an infinite works as expected.
+     *
+     * @since [*next-version*]
+     */
+    public function testCountIterableInfinite()
+    {
+        $this->markTestSkipped('Just illustrates how returning an infinite list of errors causes infinite loop');
+        $subject = $this->createInstance();
+        $_subject = $this->reflect($subject);
+        $data = array(
+            uniqid('value-'),
+            uniqid('value-'),
+            uniqid('value-'),
+        );
+
+        $result = $_subject->_countIterable($this->createIteratorInfinite($data));
         $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
     }
 }
