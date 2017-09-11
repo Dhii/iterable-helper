@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d9d782a6a4f77cef3c0feb9f54c2615",
+    "content-hash": "2028f4c69742ea2afe7086951622ed68",
     "packages": [
         {
             "name": "dhii/exception",
@@ -1121,16 +1121,16 @@
         },
         {
             "name": "ptrofimov/xpmock",
-            "version": "1.1.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ptrofimov/xpmock.git",
-                "reference": "5b95ace33624b66bf4e854071b8856722fde515e"
+                "reference": "9f73ff444df2ee51e17349afb1296fafaf366201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ptrofimov/xpmock/zipball/5b95ace33624b66bf4e854071b8856722fde515e",
-                "reference": "5b95ace33624b66bf4e854071b8856722fde515e",
+                "url": "https://api.github.com/repos/ptrofimov/xpmock/zipball/9f73ff444df2ee51e17349afb1296fafaf366201",
+                "reference": "9f73ff444df2ee51e17349afb1296fafaf366201",
                 "shasum": ""
             },
             "require": {
@@ -1150,7 +1150,7 @@
                 "MIT"
             ],
             "description": "PHPUnit: simple syntax to create mock-objects",
-            "time": "2014-01-02T16:42:27+00:00"
+            "time": "2017-07-31T08:23:23+00:00"
         },
         {
             "name": "satooshi/php-coveralls",
@@ -2195,7 +2195,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dhii/exception-helper-base": 20
+        "dhii/exception-helper-base": 20,
+        "ptrofimov/xpmock": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
