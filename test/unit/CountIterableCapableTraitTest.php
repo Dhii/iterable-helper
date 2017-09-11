@@ -41,9 +41,11 @@ class CountIterableCapableTraitTest extends TestCase
      *
      * @since [*next-version*]
      *
+     * @param array $array The array with elements which the iteraetor will iterate over.
+     *
      * @return IteratorAggregate $array The new iterator aggregate.
      */
-    public function createIteratorAggregateCountable($array)
+    public function createIteratorAggregateCountable(array $array)
     {
         $me = $this;
         // This creates a double-layer iterator aggregate
@@ -62,7 +64,16 @@ class CountIterableCapableTraitTest extends TestCase
         return $mock;
     }
 
-    public function createIteratorAggregateNonCountable($array)
+    /**
+     * Creates an iterator aggregate that contains a non-countable iterator at some level inside it.
+     *
+     * @since [*next-version*]
+     *
+     * @param array $array The array with elements which the iteraetor will iterate over.
+     *
+     * @return IteratorAggregate The new iterator.
+     */
+    public function createIteratorAggregateNonCountable(array $array)
     {
         $me = $this;
         // This creates a double-layer iterator aggregate
