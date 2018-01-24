@@ -27,6 +27,12 @@
             "Dhii\\Iterator\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Dhii\\Iterator\\UnitTest\\": "test/unit",
+            "Dhii\\Iterator\\FuncTest\\": "test/functional"
+        }
+    },
     "scripts": {
         "test": "phpunit",
         "csfix": "php-cs-fixer fix -vvv"
