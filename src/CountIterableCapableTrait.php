@@ -2,9 +2,13 @@
 
 namespace Dhii\Iterator;
 
+use InvalidArgumentException;
+use Iterator;
+use OutOfRangeException;
 use Traversable;
-use IteratorAggregate;
+use Exception as RootException;
 use Countable;
+use Dhii\Util\String\StringableInterface as Stringable;
 
 /**
  * Functionality for counting elements in an iterable.
@@ -34,17 +38,13 @@ trait CountIterableCapableTrait
     protected function _countIterable($iterable)
     {
         $resolve = function ($it) {
-            while (!($it instanceof Countable)) {
-                if (!($it instanceof IteratorAggregate)) {
-                    break;
-                }
-
-                $it = $it->getIterator();
+            try {
+                return $this->_resolveIterator($it, function ($it) {
+                    return $it instanceof Countable;
+                });
+            } catch (RootException $e) {
+                return;
             }
-
-            return $it instanceof Countable
-                    ? $it
-                    : null;
         };
 
         if (is_array($iterable) || $iterable instanceof Countable) {
@@ -57,4 +57,21 @@ trait CountIterableCapableTrait
 
         return iterator_count($iterable);
     }
+
+    /**
+     * Finds the deepest iterator that matches.
+     *
+     * @since [*next-version*]
+     *
+     * @param Traversable $iterator The iterator to resolve.
+     * @param callable    $test     The test function which determines when the iterator is considered to be resolved.
+     *                              Default: Returns `true` on first found instance of {@see Iterator}.
+     * @param $limit int|float|string|Stringable The depth limit for resolution.
+     *
+     * @throws InvalidArgumentException If limit is not a valid integer representation.
+     * @throws OutOfRangeException      If infinite recursion is detected, or the iterator could not be resolved within the depth limit.
+     *
+     * @return Iterator The inner-most iterator, or whatever the test function allows.
+     */
+    abstract protected function _resolveIterator(Traversable $iterator, $test = null, $limit = null);
 }
