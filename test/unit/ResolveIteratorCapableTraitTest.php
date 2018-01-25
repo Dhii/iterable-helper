@@ -340,7 +340,7 @@ class ResolveIteratorCapableTraitTest extends TestCase
     public function testResolveIteratorDefaultParams()
     {
         $iterator = $this->createIterator();
-        $outer = $this->createNestedIterator($iterator, 101);
+        $outer = $this->createNestedIterator($iterator, 100);
 
         $subject = $this->createInstance();
         $_subject = $this->reflect($subject);
