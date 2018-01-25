@@ -40,9 +40,8 @@ trait NormalizeIteratorCapableTrait
             return $this->_createArrayIterator($value);
         }
 
-        if ($value instanceof Traversable) {
-            return $this->_createTraversableIterator($value);
-        }
+        // If not array them gotta be traversable
+        return $this->_createTraversableIterator($value);
     }
 
     /**
