@@ -9,3 +9,21 @@
 Common functionality for working with iterables.
 
 [Dhii]: https://github.com/Dhii/dhii
+
+## Traits
+- [`ResolveIteratorCapableTrait`] - Retrieves the deepest iterator within a depth limit in an iterator hierarchy,
+where every parent is an [`IteratorAggregate`]. Can use a complex test to look for things that are not only iterators.
+Detects some signs of infinite recursion.
+- [`CountIterableCapableTrait`] - Counts elements in an iterable which passes normalization by
+[`NormalizeIterableCapableTrait`]. Uses the most optimal method for retrieving the count.
+- [`NormalizeIteratorCapableTrait`] - Normalizes any iterable that passes normalization by
+[`NormalizeIterableCapableTrait`] into an instance of [`Iterator`].
+
+
+[`ResolveIteratorCapableTrait`]:            src/ResolveIteratorCapableTrait.php
+[`CountIterableCapableTrait`]:              src/CountIterableCapableTrait.php
+[`NormalizeIteratorCapableTrait`]:          src/NormalizeIteratorCapableTrait.php
+[`NormalizeIterableCapableTrait`]:          https://github.com/Dhii/normalization-helper-base/blob/develop/src/NormalizeIterableCapableTrait.php
+
+[`Iterator`]:                               http://php.net/manual/en/class.iterator.php
+[`IteratorAggregate`]:                      http://php.net/manual/en/class.iteratoraggregate.php
