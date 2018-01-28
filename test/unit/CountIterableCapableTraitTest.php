@@ -318,4 +318,24 @@ class CountIterableCapableTraitTest extends TestCase
         $result = $_subject->_countIterable($this->createIteratorInfinite($data));
         $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
     }
+
+    /**
+     * Tests that counting an `stdClass` instance works as expected.
+     *
+     * @since [*next-version*]
+     */
+    public function testCountIterableStdClass()
+    {
+        $data = array(
+            uniqid('value-'),
+            uniqid('value-'),
+            uniqid('value-'),
+        );
+        $iterable = (object) $data;
+        $subject = $this->createInstance();
+        $_subject = $this->reflect($subject);
+
+        $result = $_subject->_countIterable($iterable);
+        $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
+    }
 }
