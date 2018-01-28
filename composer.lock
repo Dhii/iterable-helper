@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e75778d59314d8baff47d406e33b73d3",
+    "content-hash": "f93f8a841d8e8268ebfff449d2c521cf",
     "packages": [
         {
             "name": "dhii/exception",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dhii/exception.git",
-                "reference": "34cc34929e78f8fb8881cdb8793d69e721d01be7"
+                "reference": "d58f4d2dc2abb79b468781f50dc61be92185782c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dhii/exception/zipball/34cc34929e78f8fb8881cdb8793d69e721d01be7",
-                "reference": "34cc34929e78f8fb8881cdb8793d69e721d01be7",
+                "url": "https://api.github.com/repos/Dhii/exception/zipball/d58f4d2dc2abb79b468781f50dc61be92185782c",
+                "reference": "d58f4d2dc2abb79b468781f50dc61be92185782c",
                 "shasum": ""
             },
             "require": {
@@ -54,7 +54,7 @@
                 }
             ],
             "description": "Standards-compliant exception classes",
-            "time": "2017-12-28T13:33:50+00:00"
+            "time": "2018-01-25T20:56:20+00:00"
         },
         {
             "name": "dhii/exception-helper-base",
@@ -62,12 +62,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dhii/exception-helper-base.git",
-                "reference": "121a5da29153df247c11465ae04590beac897613"
+                "reference": "47411e73ce77e10ffe96e7b9fcce7bb96fb5e9ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dhii/exception-helper-base/zipball/121a5da29153df247c11465ae04590beac897613",
-                "reference": "121a5da29153df247c11465ae04590beac897613",
+                "url": "https://api.github.com/repos/Dhii/exception-helper-base/zipball/47411e73ce77e10ffe96e7b9fcce7bb96fb5e9ef",
+                "reference": "47411e73ce77e10ffe96e7b9fcce7bb96fb5e9ef",
                 "shasum": ""
             },
             "require": {
@@ -106,7 +106,7 @@
                 }
             ],
             "description": "Base functionality for exception helpers",
-            "time": "2017-12-28T13:56:48+00:00"
+            "time": "2018-01-25T21:27:12+00:00"
         },
         {
             "name": "dhii/exception-interface",
@@ -114,12 +114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dhii/exception-interface.git",
-                "reference": "0605da67fad415560023ff4d387f310642f7648e"
+                "reference": "a1fb5a8c55132f53dfb5312d4e15842c19bb4d5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dhii/exception-interface/zipball/0605da67fad415560023ff4d387f310642f7648e",
-                "reference": "0605da67fad415560023ff4d387f310642f7648e",
+                "url": "https://api.github.com/repos/Dhii/exception-interface/zipball/a1fb5a8c55132f53dfb5312d4e15842c19bb4d5e",
+                "reference": "a1fb5a8c55132f53dfb5312d4e15842c19bb4d5e",
                 "shasum": ""
             },
             "require": {
@@ -154,7 +154,7 @@
                 }
             ],
             "description": "Interfaces for most common exceptions",
-            "time": "2017-12-28T08:50:05+00:00"
+            "time": "2018-01-28T10:24:29+00:00"
         },
         {
             "name": "dhii/i18n-helper-base",
@@ -254,12 +254,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dhii/normalization-helper-base.git",
-                "reference": "eaff843d7f06690ba2030749616253b290aaf86e"
+                "reference": "b1742c2682714fca4da91764ec639168df862c0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dhii/normalization-helper-base/zipball/eaff843d7f06690ba2030749616253b290aaf86e",
-                "reference": "eaff843d7f06690ba2030749616253b290aaf86e",
+                "url": "https://api.github.com/repos/Dhii/normalization-helper-base/zipball/b1742c2682714fca4da91764ec639168df862c0a",
+                "reference": "b1742c2682714fca4da91764ec639168df862c0a",
                 "shasum": ""
             },
             "require": {
@@ -294,7 +294,7 @@
                 }
             ],
             "description": "Functionality for normalizing values.",
-            "time": "2017-12-15T09:52:21+00:00"
+            "time": "2018-01-26T01:01:38+00:00"
         },
         {
             "name": "dhii/stringable-interface",
@@ -2190,7 +2190,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dhii/exception-helper-base": 20,
         "ptrofimov/xpmock": 20
     },
     "prefer-stable": true,
