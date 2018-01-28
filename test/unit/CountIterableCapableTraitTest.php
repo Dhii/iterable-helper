@@ -2,12 +2,15 @@
 
 namespace Dhii\Iterator\FuncTest;
 
+use Iterator;
+use Traversable;
 use Xpmock\TestCase;
 use ArrayIterator;
-use IteratorIterator;
 use InfiniteIterator;
 use IteratorAggregate;
+use Exception as RootException;
 use Dhii\Iterator\CountIterableCapableTrait as TestSubject;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Tests {@see TestSubject}.
@@ -28,69 +31,103 @@ class CountIterableCapableTraitTest extends TestCase
      *
      * @since [*next-version*]
      *
-     * @return object
+     * @param array $methods The methods to mock.
+     *
+     * @return MockObject The new instance.
      */
-    public function createInstance()
+    public function createInstance($methods = [])
     {
-        $mock = $this->getMockForTrait(static::TEST_SUBJECT_CLASSNAME);
+        $methods = $this->mergeValues($methods, [
+
+        ]);
+
+        $mock = $this->getMockBuilder(static::TEST_SUBJECT_CLASSNAME)
+            ->setMethods($methods)
+            ->getMockForTrait();
 
         return $mock;
     }
 
     /**
-     * Creates a new iterator aggregate, the internal iterator of which can be counted.
+     * Merges the values of two arrays.
+     *
+     * The resulting product will be a numeric array where the values of both inputs are present, without duplicates.
      *
      * @since [*next-version*]
      *
-     * @param array $array The array with elements which the iteraetor will iterate over.
+     * @param array $destination The base array.
+     * @param array $source      The array with more keys.
      *
-     * @return IteratorAggregate $array The new iterator aggregate.
+     * @return array The array which contains unique values
      */
-    public function createIteratorAggregateCountable(array $array)
+    public function mergeValues($destination, $source)
     {
-        $me = $this;
-        // This creates a double-layer iterator aggregate
-        $mock = $this->mock('IteratorAggregate')
-                ->getIterator(function () use (&$me, $array) {
-                    $it = $me->mock('IteratorAggregate')
-                            ->getIterator(function () use ($array) {
-                                return new ArrayIterator($array);
-                            })
-                            ->new();
+        return array_keys(array_merge(array_flip($destination), array_flip($source)));
+    }
 
-                    return $it;
-                })
-                ->new();
+    /**
+     * Creates a mock that both extends a class and implements interfaces.
+     *
+     * This is particularly useful for cases where the mock is based on an
+     * internal class, such as in the case with exceptions. Helps to avoid
+     * writing hard-coded stubs.
+     *
+     * @since [*next-version*]
+     *
+     * @param string $className      Name of the class for the mock to extend.
+     * @param array  $interfaceNames Names of the interfaces for the mock to implement.
+     *
+     * @return object The object that extends and implements the specified class and interfaces.
+     */
+    public function mockClassAndInterfaces($className, $interfaceNames = [])
+    {
+        $paddingClassName = uniqid($className);
+        $definition = vsprintf('abstract class %1$s extends %2$s implements %3$s {}', [
+            $paddingClassName,
+            $className,
+            implode(', ', $interfaceNames),
+        ]);
+        eval($definition);
+
+        return $this->getMockForAbstractClass($paddingClassName);
+    }
+
+    /**
+     * Creates a new exception.
+     *
+     * @since [*next-version*]
+     *
+     * @param string $message The exception message.
+     *
+     * @return RootException The new exception.
+     */
+    public function createException($message = '')
+    {
+        $mock = $this->getMockBuilder('Exception')
+            ->setConstructorArgs([$message])
+            ->getMock();
 
         return $mock;
     }
 
     /**
-     * Creates an iterator aggregate that contains a non-countable iterator at some level inside it.
+     * Create a new non-countable iterator.
      *
-     * @since [*next-version*]
+     * @param array $elements The elements to iterate over.
      *
-     * @param array $array The array with elements which the iteraetor will iterate over.
-     *
-     * @return IteratorAggregate The new iterator.
+     * @return Iterator The new iterator.
      */
-    public function createIteratorAggregateNonCountable(array $array)
+    public function createIteratorNotCountable(array $elements = [])
     {
-        $me = $this;
-        // This creates a double-layer iterator aggregate
-        $mock = $this->mock('IteratorAggregate')
-                ->getIterator(function () use (&$me, $array) {
-                    $it = $me->mock('IteratorAggregate')
-                            ->getIterator(function () use ($array) {
-                                return new IteratorIterator(new ArrayIterator($array));
-                            })
-                            ->new();
+        $inner = $this->createIterator($elements);
+//        $iterator = $this->getMockBuilder('NoRewindIterator')
+//                ->setConstructorArgs([$inner])
+//                ->getMock();
+        $iterator = new \CallbackFilterIterator($inner, function ($current, $key, $iterator) { return true; });
 
-                    return $it;
-                })
-                ->new();
+        $this->assertNotInstanceOf('Countable', $iterator, 'Iterator is countable');
 
-        return $mock;
+        return $iterator;
     }
 
     /**
@@ -110,6 +147,41 @@ class CountIterableCapableTraitTest extends TestCase
         }
 
         return new InfiniteIterator(new ArrayIterator($array));
+    }
+
+    /**
+     * Creates a new iterator.
+     *
+     * @since [*next-version*]
+     *
+     * @param array $elements The elements that the iterator will iterate over.
+     *
+     * @return Iterator The new iterator.
+     */
+    public function createIterator(array $elements = [])
+    {
+        return new ArrayIterator($elements);
+    }
+
+    /**
+     * Creates a new aggregate iterator.
+     *
+     * @since [*next-version*]
+     *
+     * @param Traversable $iterator The iterator that the result will aggregate.
+     *
+     * @return IteratorAggregate The new aggregate iterator.
+     */
+    public function createIteratorAggregate(Traversable $iterator)
+    {
+        $mock = $this->getMockBuilder('IteratorAggregate')
+            ->setMethods(['getIterator'])
+            ->getMock();
+
+        $mock->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        return $mock;
     }
 
     /**
@@ -150,54 +222,81 @@ class CountIterableCapableTraitTest extends TestCase
      */
     public function testCountIterableCountable()
     {
-        $subject = $this->createInstance();
-        $_subject = $this->reflect($subject);
         $data = array(
             uniqid('value-'),
             uniqid('value-'),
             uniqid('value-'),
         );
+        $inner = $this->createIterator($data);
+        $iterator = $this->createIteratorAggregate($inner);
+        $subject = $this->createInstance(['_resolveIterator']);
+        $_subject = $this->reflect($subject);
 
-        $result = $_subject->_countIterable(new ArrayIterator($data));
+        $subject->expects($this->exactly(1))
+            ->method('_resolveIterator')
+            ->with(
+                $iterator,
+                $this->isType('callable')
+            )
+            ->will($this->returnCallback(function ($it, $test) use ($inner) {
+                $test($it);
+
+                return $inner;
+            }));
+
+        $result = $_subject->_countIterable($iterator);
         $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
     }
 
     /**
-     * Tests that counting an iterator aggregate containing a countable works as expected.
+     * Tests that counting a countable works as expected.
      *
      * @since [*next-version*]
      */
-    public function testCountIterableAggregateCountable()
+    public function testCountIterableCountableUnresolvable()
     {
-        $subject = $this->createInstance();
-        $_subject = $this->reflect($subject);
         $data = array(
             uniqid('value-'),
             uniqid('value-'),
             uniqid('value-'),
         );
+        $inner = $this->createIterator($data);
+        $iterator = $this->createIteratorAggregate($inner);
+        $subject = $this->createInstance(['_resolveIterator']);
+        $_subject = $this->reflect($subject);
+        $exception = $this->createException(uniqid('Cannot resolve '));
 
-        $result = $_subject->_countIterable($this->createIteratorAggregateCountable($data));
+        $subject->expects($this->exactly(1))
+            ->method('_resolveIterator')
+            ->with(
+                $iterator,
+                $this->isType('callable')
+            )
+            ->will($this->throwException($exception));
+
+        $result = $_subject->_countIterable($iterator);
         $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
     }
 
     /**
-     * Tests that counting a non-countable works as expected.
+     * Tests that counting a countable works as expected.
      *
      * @since [*next-version*]
      */
-    public function testCountIterableAggregateNonCountable()
+    public function testCountIterableNotCountable()
     {
-        $subject = $this->createInstance();
-        $_subject = $this->reflect($subject);
         $data = array(
             uniqid('value-'),
             uniqid('value-'),
             uniqid('value-'),
         );
+        $iterator = $this->createIteratorNotCountable($data);
+        $subject = $this->createInstance();
+        $_subject = $this->reflect($subject);
 
-        $result = $_subject->_countIterable($this->createIteratorAggregateNonCountable($data));
-        $this->assertSame(count($data), $result, 'Wrong result when counting a countable');
+        $result = $_subject->_countIterable($iterator);
+
+        $this->assertSame(count($data), $result, 'Wrong result when counting a non-countable');
     }
 
     /**
