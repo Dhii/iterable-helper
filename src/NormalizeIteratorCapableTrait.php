@@ -2,46 +2,57 @@
 
 namespace Dhii\Iterator;
 
+use InvalidArgumentException;
+use stdClass;
 use Traversable;
 use Iterator;
+use Exception as RootException;
+use Dhii\Util\String\StringableInterface as Stringable;
 
 /**
- * Functionality for normalizing iterators.
+ * Functionality for normalizing iterables into iterators.
  *
  * @since [*next-version*]
  */
 trait NormalizeIteratorCapableTrait
 {
     /**
-     * Normalizes a value into an iterator.
+     * Normalizes an iterable value into an iterator.
      *
      * If the value is iterable, the resulting iterator would iterate over the
      * elements in the iterable.
-     * Otherwise, such as if the value is scalable, or an object of a different
-     * type, it will be treated as an iterable with one element: itself.
      *
      * @since [*next-version*]
      *
-     * @param array|Traversable|mixed $value The value to normalize.
+     * @param array|stdClass|Traversable|mixed $iterable The value to normalize.
      *
      * @return Iterator The normalized iterator.
      */
-    protected function _normalizeIterator($value)
+    protected function _normalizeIterator($iterable)
     {
-        if (!is_array($value) && !($value instanceof Traversable)) {
-            $value = [$value];
+        if ($iterable instanceof stdClass) {
+            $iterable = (array) $iterable;
         }
 
-        if ($value instanceof Iterator) {
-            return $value;
+        if (!is_array($iterable) && !($iterable instanceof Traversable)) {
+            throw $this->_createInvalidArgumentException(
+                $this->__('Invalid iterable'),
+                null,
+                null,
+                $iterable
+            );
         }
 
-        if (is_array($value)) {
-            return $this->_createArrayIterator($value);
+        if ($iterable instanceof Iterator) {
+            return $iterable;
+        }
+
+        if (is_array($iterable)) {
+            return $this->_createArrayIterator($iterable);
         }
 
         // If not array them gotta be traversable
-        return $this->_createTraversableIterator($value);
+        return $this->_createTraversableIterator($iterable);
     }
 
     /**
@@ -65,4 +76,37 @@ trait NormalizeIteratorCapableTrait
      * @return Iterator The iterator that will iterate over the traversable.
      */
     abstract protected function _createTraversableIterator(Traversable $traversable);
+
+    /**
+     * Creates a new Invalid Argument exception.
+     *
+     * @since [*next-version*]
+     *
+     * @param string|Stringable|null $message  The error message, if any.
+     * @param int|null               $code     The error code, if any.
+     * @param RootException|null     $previous The inner exception for chaining, if any.
+     * @param mixed|null             $argument The invalid argument, if any.
+     *
+     * @return InvalidArgumentException The new exception.
+     */
+    abstract protected function _createInvalidArgumentException(
+        $message = null,
+        $code = null,
+        RootException $previous = null,
+        $argument = null
+    );
+
+    /**
+     * Translates a string, and replaces placeholders.
+     *
+     * @since [*next-version*]
+     * @see sprintf()
+     *
+     * @param string $string  The format string to translate.
+     * @param array  $args    Placeholder values to replace in the string.
+     * @param mixed  $context The context for translation.
+     *
+     * @return string The translated string.
+     */
+    abstract protected function __($string, $args = [], $context = null);
 }

@@ -2,6 +2,7 @@
 
 namespace Dhii\Iterator\UnitTest;
 
+use Countable;
 use Iterator;
 use IteratorAggregate;
 use Traversable;
@@ -9,6 +10,7 @@ use Xpmock\TestCase;
 use Exception as RootException;
 use OutOfRangeException;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit_Framework_MockObject_MockBuilder as MockBuilder;
 use ArrayIterator;
 use Dhii\Iterator\ResolveIteratorCapableTrait as TestSubject;
 
@@ -92,7 +94,7 @@ class ResolveIteratorCapableTraitTest extends TestCase
      * @param string $className      Name of the class for the mock to extend.
      * @param array  $interfaceNames Names of the interfaces for the mock to implement.
      *
-     * @return object The object that extends and implements the specified class and interfaces.
+     * @return MockBuilder The builder for a mock of an object that extends and implements the specified class and interfaces.
      */
     public function mockClassAndInterfaces($className, $interfaceNames = [])
     {
@@ -104,7 +106,7 @@ class ResolveIteratorCapableTraitTest extends TestCase
         ]);
         eval($definition);
 
-        return $this->getMockForAbstractClass($paddingClassName);
+        return $this->getMockBuilder($paddingClassName);
     }
 
     /**
@@ -252,6 +254,43 @@ class ResolveIteratorCapableTraitTest extends TestCase
     }
 
     /**
+     * Creates a new object that is countable, but is not an iterator.
+     *
+     * @since [*next-version*]
+     *
+     * @return Countable|IteratorAggregate The new countable.
+     */
+    public function createCountableNonIterator($elements = [])
+    {
+        $inner = $this->createIterator($elements);
+        $mock = $this->mockClassAndInterfaces('stdClass', ['Iterator'])
+                ->setMethods([
+//                    'count',
+                    'next',
+                    'key',
+                    'current',
+                    'valid',
+                    'rewind',
+                ])
+                ->getMock();
+
+//        $mock->method('count')
+//                ->will($this->returnValue(count($elements)));
+        $mock->method('next')
+            ->will($this->returnCallback(function () use ($inner) { $inner->next(); }));
+        $mock->method('key')
+            ->will($this->returnCallback(function () use ($inner) { return $inner->key(); }));
+        $mock->method('current')
+            ->will($this->returnCallback(function () use ($inner) { return $inner->current(); }));
+        $mock->method('valid')
+            ->will($this->returnCallback(function () use ($inner) { $inner->valid(); }));
+        $mock->method('valid')
+            ->will($this->returnCallback(function () use ($inner) { $inner->rewind(); }));
+
+        return $mock;
+    }
+
+    /**
      * Tests whether a valid instance of the test subject can be created.
      *
      * @since [*next-version*]
@@ -347,5 +386,23 @@ class ResolveIteratorCapableTraitTest extends TestCase
 
         $result = $_subject->_resolveIterator($outer);
         $this->assertSame($iterator, $result, 'Resolution resulted in wrong iterator');
+    }
+
+    /**
+     * Tests that the `_resolveIterator()` method works as expected when the test does not check for `Iterator`.
+     *
+     * @since [*next-version*]
+     */
+    public function testResolveIteratorFailureNonIteratorTest()
+    {
+        $data = [uniqid('key') => uniqid('val')];
+        $testCb = $this->createCallable(function ($it) { return $it instanceof Countable; });
+        $iterator = $this->createCountableNonIterator($data);
+
+        $subject = $this->createInstance();
+        $_subject = $this->reflect($subject);
+
+        $this->setExpectedException('OutOfRangeException');
+        $result = $_subject->_resolveIterator($iterator, $testCb);
     }
 }

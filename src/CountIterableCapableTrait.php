@@ -5,6 +5,7 @@ namespace Dhii\Iterator;
 use InvalidArgumentException;
 use Iterator;
 use OutOfRangeException;
+use stdClass;
 use Traversable;
 use Exception as RootException;
 use Countable;
@@ -21,6 +22,7 @@ trait CountIterableCapableTrait
      * Counts the elements in an iterable.
      *
      * Is optimized to retrieve count from values that support it.
+     * - If {@see stdClass} instance, will enumerate the properties into an array.
      * - If array, will count in regular way using count();
      * - If {@see Countable}, will do the same;
      * - If {@see IteratorAggregate}, will drill down into internal iterators
@@ -31,7 +33,7 @@ trait CountIterableCapableTrait
      *
      * @since [*next-version*]
      *
-     * @param array|Traversable $iterable The iterable to count. Must be finite.
+     * @param array|stdClass|Traversable $iterable The iterable to count. Must be finite.
      *
      * @return int The amount of elements.
      */
@@ -46,6 +48,10 @@ trait CountIterableCapableTrait
                 return;
             }
         };
+
+        if ($iterable instanceof stdClass) {
+            $iterable = (array) $iterable;
+        }
 
         if (is_array($iterable) || $iterable instanceof Countable) {
             return count($iterable);
