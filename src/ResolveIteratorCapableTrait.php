@@ -59,7 +59,10 @@ trait ResolveIteratorCapableTrait
 
         $i = 0;
         while (!$test($iterator) && $i < $limit) {
-            /* @var $iterator IteratorAggregate */
+            if (!($iterator instanceof IteratorAggregate)) {
+                break;
+            }
+
             $_it = $iterator->getIterator();
             if ($iterator === $_it) {
                 throw $this->_createOutOfRangeException(
