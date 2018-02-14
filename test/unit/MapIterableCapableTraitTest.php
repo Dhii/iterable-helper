@@ -204,7 +204,7 @@ class MapIterableCapableTraitTest extends TestCase
             $key3 => $val3,
         ];
         $start = 0;
-        $end = 0;
+        $count = 0;
         $iterable = $data;
         $subject = $this->createInstance();
         $_subject = $this->reflect($subject);
@@ -224,7 +224,7 @@ class MapIterableCapableTraitTest extends TestCase
             ->will($this->returnArgument(0));
         $subject->expects($this->exactly(2))
             ->method('_normalizeInt')
-            ->withConsecutive([$start], [$end])
+            ->withConsecutive([$start], [$count])
             ->willReturnArgument(0);
         $subject->expects($this->exactly(count($data)))
             ->method('_invokeCallable')
@@ -240,7 +240,7 @@ class MapIterableCapableTraitTest extends TestCase
         $result = [];
         $method = new ReflectionMethod($subject, '_mapIterable');
         $method->setAccessible(true);
-        $method->invokeArgs($subject, [$iterable, $cb, null, null, &$result]);
+        $method->invokeArgs($subject, [$iterable, $cb, $start, $count, &$result]);
         $this->assertCount(count($data), $result, 'Mapping iterable resulted in a wrong number of items');
         $this->assertArraySubset($expected, $result, 'Mapping iterable resulted in a wrong set');
     }
@@ -325,7 +325,7 @@ class MapIterableCapableTraitTest extends TestCase
             $key3 => $val3,
         ];
         $start = 0;
-        $end = 0;
+        $count = 0;
         $iterable = (object) $data;
         $subject = $this->createInstance();
         $_subject = $this->reflect($subject);
@@ -345,7 +345,7 @@ class MapIterableCapableTraitTest extends TestCase
             ->will($this->returnArgument(0));
         $subject->expects($this->exactly(2))
             ->method('_normalizeInt')
-            ->withConsecutive([$start], [$end])
+            ->withConsecutive([$start], [$count])
             ->willReturnArgument(0);
         $subject->expects($this->exactly(count($expected)))
             ->method('_invokeCallable')
@@ -361,7 +361,7 @@ class MapIterableCapableTraitTest extends TestCase
         $result = [];
         $method = new ReflectionMethod($subject, '_mapIterable');
         $method->setAccessible(true);
-        $method->invokeArgs($subject, [$iterable, $cb, null, null, &$result]);
+        $method->invokeArgs($subject, [$iterable, $cb, $start, $count, &$result]);
         $this->assertCount(count($data), $result, 'Mapping iterable resulted in a wrong number of items');
         $this->assertArraySubset($expected, $result, 'Mapping iterable resulted in a wrong set');
     }
@@ -385,7 +385,7 @@ class MapIterableCapableTraitTest extends TestCase
             $key3 => $val3,
         ];
         $start = 0;
-        $end = 0;
+        $count = 0;
         $iterable = $this->mockTraversable($data);
         $subject = $this->createInstance();
         $_subject = $this->reflect($subject);
@@ -405,7 +405,7 @@ class MapIterableCapableTraitTest extends TestCase
             ->will($this->returnArgument(0));
         $subject->expects($this->exactly(2))
             ->method('_normalizeInt')
-            ->withConsecutive([$start], [$end])
+            ->withConsecutive([$start], [$count])
             ->willReturnArgument(0);
         $subject->expects($this->exactly(count($expected)))
             ->method('_invokeCallable')
@@ -421,7 +421,7 @@ class MapIterableCapableTraitTest extends TestCase
         $result = [];
         $method = new ReflectionMethod($subject, '_mapIterable');
         $method->setAccessible(true);
-        $method->invokeArgs($subject, [$iterable, $cb, $start, $end, &$result]);
+        $method->invokeArgs($subject, [$iterable, $cb, $start, $count, &$result]);
         $this->assertCount(count($data), $result, 'Mapping iterable resulted in a wrong number of items');
         $this->assertArraySubset($expected, $result, 'Mapping iterable resulted in a wrong set');
     }
@@ -434,7 +434,7 @@ class MapIterableCapableTraitTest extends TestCase
     public function testMapIterableFailureInvalidIterable()
     {
         $start = 0;
-        $end = 0;
+        $count = 0;
         $iterable = uniqid('iterable');
         $cb = function () {};
         $exception = $this->createInvalidArgumentException('Invalid iterable');
@@ -451,7 +451,7 @@ class MapIterableCapableTraitTest extends TestCase
         $method->setAccessible(true);
 
         $this->setExpectedException('InvalidArgumentException');
-        $method->invokeArgs($subject, [$iterable, $cb, $start, $end, &$result]);
+        $method->invokeArgs($subject, [$iterable, $cb, $start, $count, &$result]);
     }
 
     /**
@@ -462,7 +462,7 @@ class MapIterableCapableTraitTest extends TestCase
     public function testMapIterableFailureInvalidLimits()
     {
         $start = uniqid('start');
-        $end = uniqid('end');
+        $count = uniqid('count');
         $iterable = [];
         $cb = function () {};
         $exception = $this->createInvalidArgumentException('Invalid limits');
@@ -483,7 +483,7 @@ class MapIterableCapableTraitTest extends TestCase
         $method->setAccessible(true);
 
         $this->setExpectedException('InvalidArgumentException');
-        $method->invokeArgs($subject, [$iterable, $cb, $start, $end, &$result]);
+        $method->invokeArgs($subject, [$iterable, $cb, $start, $count, &$result]);
     }
 
     /**
@@ -494,7 +494,7 @@ class MapIterableCapableTraitTest extends TestCase
     public function testMapIterableFailureInvocation()
     {
         $start = null;
-        $end = null;
+        $count = null;
         $key = uniqid('key');
         $val = uniqid('val');
         $iterable = [$key => $val];
@@ -509,7 +509,7 @@ class MapIterableCapableTraitTest extends TestCase
             ->will($this->returnValue($iterable));
         $subject->expects($this->exactly(2))
             ->method('_normalizeInt')
-            ->withConsecutive([$start], [$end])
+            ->withConsecutive([$start], [$count])
             ->will($this->returnArgument(0));
         $subject->expects($this->exactly(1))
             ->method('_invokeCallable')
@@ -521,6 +521,6 @@ class MapIterableCapableTraitTest extends TestCase
         $method->setAccessible(true);
 
         $this->setExpectedException('Dhii\Invocation\Exception\InvocationExceptionInterface');
-        $method->invokeArgs($subject, [$iterable, $cb, $start, $end, &$result]);
+        $method->invokeArgs($subject, [$iterable, $cb, $start, $count, &$result]);
     }
 }
