@@ -37,15 +37,13 @@ trait MapIterableCapableTrait
     {
         $iterable = $this->_normalizeIterable($iterable);
 
-        if (is_null($start)) {
-            $start = 0;
-        }
-        if (is_null($count)) {
-            $count = 0;
-        }
+        $start = is_null($start)
+            ? 0
+            : $this->_normalizeInt($start);
+        $count = is_null($count)
+            ? 0
+            : $this->_normalizeInt($count);
 
-        $start = $this->_normalizeInt($start);
-        $count = $this->_normalizeInt($count);
         $cStop = $count - 1;
 
         $i = 0; // Current iteration
