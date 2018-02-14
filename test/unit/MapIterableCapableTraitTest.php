@@ -206,7 +206,7 @@ class MapIterableCapableTraitTest extends TestCase
         $start = 0;
         $count = 0;
         $iterable = $data;
-        $subject = $this->createInstance();
+        $subject = $this->createInstance(['_normalizeIterable', '_normalizeInt', '_invokeCallable']);
         $_subject = $this->reflect($subject);
 
         $cb = function ($value, $key, $iterator) {
@@ -269,7 +269,7 @@ class MapIterableCapableTraitTest extends TestCase
         $start = 1;
         $count = 2;
         $iterable = $data;
-        $subject = $this->createInstance();
+        $subject = $this->createInstance(['_normalizeIterable', '_normalizeInt', '_invokeCallable']);
         $_subject = $this->reflect($subject);
 
         $cb = function ($value, $key, $iterator) {
@@ -327,7 +327,7 @@ class MapIterableCapableTraitTest extends TestCase
         $start = 0;
         $count = 0;
         $iterable = (object) $data;
-        $subject = $this->createInstance();
+        $subject = $this->createInstance(['_normalizeIterable', '_normalizeInt', '_invokeCallable']);
         $_subject = $this->reflect($subject);
 
         $cb = function ($value, $key, $iterable) {
@@ -387,7 +387,7 @@ class MapIterableCapableTraitTest extends TestCase
         $start = 0;
         $count = 0;
         $iterable = $this->mockTraversable($data);
-        $subject = $this->createInstance();
+        $subject = $this->createInstance(['_normalizeIterable', '_normalizeInt', '_invokeCallable']);
         $_subject = $this->reflect($subject);
 
         $cb = function ($value, $key, $iterable) {
@@ -438,7 +438,7 @@ class MapIterableCapableTraitTest extends TestCase
         $iterable = uniqid('iterable');
         $cb = function () {};
         $exception = $this->createInvalidArgumentException('Invalid iterable');
-        $subject = $this->createInstance();
+        $subject = $this->createInstance(['_normalizeIterable']);
         $_subject = $this->reflect($subject);
 
         $subject->expects($this->exactly(1))
@@ -466,7 +466,7 @@ class MapIterableCapableTraitTest extends TestCase
         $iterable = [];
         $cb = function () {};
         $exception = $this->createInvalidArgumentException('Invalid limits');
-        $subject = $this->createInstance();
+        $subject = $this->createInstance(['_normalizeIterable', '_normalizeInt']);
         $_subject = $this->reflect($subject);
 
         $subject->expects($this->exactly(1))
