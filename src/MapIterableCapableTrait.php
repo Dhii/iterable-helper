@@ -21,7 +21,10 @@ trait MapIterableCapableTrait
      * @since [*next-version*]
      *
      * @param array|stdClass|Traversable            $iterable The iterable to map.
-     * @param callable                              $callback
+     * @param callable                              $callback The callback to apply to the elements of the iterable.
+     *                                                        The callback return value will be stored in `$results`.
+     *                                                        Signature:
+     *                                                        `function ($value, $key, $iterable)`
      * @param Stringable|string|int|float|bool|null $start    The offset of the iteration, at which to start applying the callback.
      *                                                        Iterations will still happen on all previous elements, but the callback will not be applied.
      *                                                        Default: 0.
