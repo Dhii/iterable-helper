@@ -23,7 +23,7 @@ trait MapIterableCapableTrait
      * @param Stringable|string|int|float|bool|null $count    The number  of invocations to make. Iteration will stop when this number is reached.
      *                                                        Pass 0 (zero) to iterate until end.
      *                                                        Default: 0.
-     * @param array|null                            $results  This will be filled with the results of the callback, in the same order, preserving keys.
+     * @param array|null                            $results  If array, this will be filled with the results of the callback, in the same order, preserving keys.
      *
      * @throws InvalidArgumentException     If the iterable, the callback, start, or end are invalid.
      * @throws InvocationExceptionInterface If problem during invocation of the callback.
