@@ -48,8 +48,8 @@ trait MapIterableCapableTrait
         $count = $this->_normalizeInt($count);
         $cStop = $count - 1;
 
-        $i = 0;
-        $c = 0;
+        $i = 0; // Current iteration
+        $c = 0; // Current count
         foreach ($iterable as $_k => $_v) {
             if ($i < $start) {
                 ++$i;
