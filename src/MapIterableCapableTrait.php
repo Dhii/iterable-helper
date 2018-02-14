@@ -8,6 +8,11 @@ use InvalidArgumentException;
 use stdClass;
 use Traversable;
 
+/**
+ * Functionality for looping over an iterable.
+ *
+ * @since [*next-version*]
+ */
 trait MapIterableCapableTrait
 {
     /**
