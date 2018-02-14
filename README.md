@@ -18,12 +18,17 @@ Detects some signs of infinite recursion.
 [`NormalizeIterableCapableTrait`]. Uses the most optimal method for retrieving the count.
 - [`NormalizeIteratorCapableTrait`] - Normalizes any iterable that passes normalization by
 [`NormalizeIterableCapableTrait`] into an instance of [`Iterator`].
+- [`MapIterableCapableTrait`][MapIterableCapableTrait] - Maps an iterable, similarly to [`array_map()`][array_map()] or
+[`iterator_apply()`][iterator_apply()].
 
 
 [`ResolveIteratorCapableTrait`]:            src/ResolveIteratorCapableTrait.php
 [`CountIterableCapableTrait`]:              src/CountIterableCapableTrait.php
 [`NormalizeIteratorCapableTrait`]:          src/NormalizeIteratorCapableTrait.php
+[MapIterableCapableTrait]:                  src/MapIterableCapableTrait.php
 [`NormalizeIterableCapableTrait`]:          https://github.com/Dhii/normalization-helper-base/blob/develop/src/NormalizeIterableCapableTrait.php
 
 [`Iterator`]:                               http://php.net/manual/en/class.iterator.php
 [`IteratorAggregate`]:                      http://php.net/manual/en/class.iteratoraggregate.php
+[array_map()]:                              http://php.net/manual/en/function.array-map.php
+[iterator_apply()]:                         http://php.net/manual/en/function.iterator-apply.php

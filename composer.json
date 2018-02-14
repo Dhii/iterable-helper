@@ -20,7 +20,11 @@
         "ptrofimov/xpmock": "dev-master",
         "dhii/php-cs-fixer-config": "^0.1",
         "codeclimate/php-test-reporter": "<=0.3.2",
-        "dhii/stringable-interface": "^0.1"
+        "dhii/stringable-interface": "^0.1",
+        "dhii/invocable-interface": "0.1-alpha1"
+    },
+    "suggest": {
+        "dhii/callback-abstract": "For structural invocation of callables"
     },
     "autoload": {
         "psr-4": {
