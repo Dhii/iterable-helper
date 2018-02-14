@@ -139,7 +139,7 @@ class MapIterableCapableTraitTest extends TestCase
      *
      * @param string $message The exception message.
      *
-     * @return MockObject|InvocationExceptionInterface The new exception.
+     * @return MockObject|RootException|InvocationExceptionInterface The new exception.
      */
     public function createInvocationException($message = '')
     {
