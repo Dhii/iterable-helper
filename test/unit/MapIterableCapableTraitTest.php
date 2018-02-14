@@ -507,10 +507,8 @@ class MapIterableCapableTraitTest extends TestCase
             ->method('_normalizeIterable')
             ->with($iterable)
             ->will($this->returnValue($iterable));
-        $subject->expects($this->exactly(2))
-            ->method('_normalizeInt')
-            ->withConsecutive([$start], [$count])
-            ->will($this->returnArgument(0));
+        $subject->expects($this->exactly(0))
+            ->method('_normalizeInt');
         $subject->expects($this->exactly(1))
             ->method('_invokeCallable')
             ->withConsecutive([$cb, [$val, $key, $iterable]])
